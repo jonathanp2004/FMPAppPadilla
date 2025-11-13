@@ -18,14 +18,9 @@ public class Quote {
     private Float priceAvg50; //" : 112.15875000,
     private Float priceAvg200; //" : 85.41895000,
     private Integer volume; //" : 332607163,
-    private Integer avgVolume; //" : 165778904,
     private String exchange; //" : "NASDAQ",
     private Float open; //" : 120.07000000,
     private Float previousClose; //" : 120.88000000,
-    private Float eps; //" : 3.29600000,
-    private Float pe; //" : 36.69902800,
-    private String earningsAnnouncement; //" : "2020-07-30T16:30:00.000+0000",
-    private String sharesOutstanding; //" : 17102500165,
     private String timestamp; //" : 1599435459
 
     public Quote(String symbol, String name, Float price, Float changesPercentage, Float change, Float dayLow, Float dayHigh, Float yearHigh, Float yearLow, Float marketCap, Float priceAvg50, Float priceAvg200, Integer volume, Integer avgVolume, String exchange, Float open, Float previousClose, Float eps, Float pe, String earningsAnnouncement, String sharesOutstanding, String timestamp) {
@@ -42,14 +37,9 @@ public class Quote {
         this.priceAvg50 = priceAvg50;
         this.priceAvg200 = priceAvg200;
         this.volume = volume;
-        this.avgVolume = avgVolume;
         this.exchange = exchange;
         this.open = open;
         this.previousClose = previousClose;
-        this.eps = eps;
-        this.pe = pe;
-        this.earningsAnnouncement = earningsAnnouncement;
-        this.sharesOutstanding = sharesOutstanding;
         this.timestamp = timestamp;
     }
 
@@ -105,9 +95,6 @@ public class Quote {
         return volume;
     }
 
-    public Integer getAvgVolume() {
-        return avgVolume;
-    }
 
     public String getExchange() {
         return exchange;
@@ -121,21 +108,6 @@ public class Quote {
         return previousClose;
     }
 
-    public Float getEps() {
-        return eps;
-    }
-
-    public Float getPe() {
-        return pe;
-    }
-
-    public String getEarningsAnnouncement() {
-        return earningsAnnouncement;
-    }
-
-    public String getSharesOutstanding() {
-        return sharesOutstanding;
-    }
 
     public String getTimestamp() {
         return timestamp;

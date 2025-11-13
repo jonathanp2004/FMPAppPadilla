@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,24 +13,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.androidnetworking.AndroidNetworking;
-import com.androidnetworking.common.ANRequest;
-import com.androidnetworking.common.Priority;
-import com.androidnetworking.error.ANError;
-import com.androidnetworking.interfaces.JSONArrayRequestListener;
-import com.androidnetworking.interfaces.ParsedRequestListener;
+import com.amitshekhar.android.networking.AndroidNetworking;
+import com.amitshekhar.android.networking.common.ANRequest;
+import com.amitshekhar.android.networking.common.Priority;
+import com.amitshekhar.android.networking.error.ANError;
+import com.amitshekhar.android.networking.interfaces.ParsedRequestListener;
 import com.squareup.picasso.Picasso;
 
 
-import org.json.JSONArray;
-import org.json.JSONException;
-
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -41,25 +31,22 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String API_KEY = "demo";
-    private final View.OnClickListener localListener = new View.OnClickListener(){
-        @Override
-        public void onClick(View v) {
-            TextView tickerTextView = (TextView) findViewById(R.id.editTextTicker);
-            String ticker = tickerTextView.getText().toString();
-            String imageURL = "https://financialmodelingprep.com/image-stock/AAPL.png";
-            ImageView iv = findViewById(R.id.logoView);
-            Picasso.get().load(imageURL).into(iv);
-            makeRequest(ticker);
+    private static final String API_KEY = "avEIu9isoHu9ysZ9krb2JPmwBIDZThwu";
+    private final View.OnClickListener localListener = v -> {
+        TextView tickerTextView = findViewById(R.id.editTextTicker);
+        String ticker = tickerTextView.getText().toString();
+        String imageURL = "https://financialmodelingprep.com/image-stock/AAPL.png";
+        ImageView iv = findViewById(R.id.logoView);
+        Picasso.get().load(imageURL).into(iv);
+        makeRequest(ticker);
 
-            Toast.makeText(v.getContext(),"Hello puppies", Toast.LENGTH_LONG).show();
-        }
+        Toast.makeText(v.getContext(),"Hello puppies", Toast.LENGTH_LONG).show();
     };
 
     private void makeRequest(String ticker){
         // https://financialmodelingprep.com/api/v3/quote/AAPL?apikey=demo
-        ANRequest req = AndroidNetworking.get("https://financialmodelingprep.com/api/v3/quote/{ticker}")
-                .addPathParameter("ticker", ticker)
+        ANRequest req = AndroidNetworking.get("https://financialmodelingprep.com/stable/quote")
+                .addPathParameter("symbol", ticker)
                 .addQueryParameter("apikey", API_KEY)
                 .setPriority(Priority.LOW)
                 .build();
@@ -87,8 +74,8 @@ public class MainActivity extends AppCompatActivity {
                     ((TextView) findViewById(R.id.priceAvg50Text)).setText(String.format(Locale.US,"%.2f", quote.getPriceAvg50()));
                     ((TextView) findViewById(R.id.dayRangeText)).setText(dayRange);
                     ((TextView) findViewById(R.id.yearRangeText)).setText(yearRange);
-                    ((TextView) findViewById(R.id.epsText)).setText(String.format(Locale.US,"%.3f", quote.getEps()));
-                    ((TextView) findViewById(R.id.sharesText)).setText(quote.getSharesOutstanding());
+                    //((TextView) findViewById(R.id.epsText)).setText(String.format(Locale.US,"%.3f", quote.getEps()));
+                   // ((TextView) findViewById(R.id.sharesText)).setText(quote.getSharesOutstanding());
                     ((TextView) findViewById(R.id.earningsText)).setText(date.toString());
                     String toastText = "A share of " + quote.getName() + "is currently at $" + quote.getPrice();
                     Toast.makeText(getApplicationContext(),toastText, Toast.LENGTH_LONG).show();
@@ -98,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
             public void onError(ANError anError) {
                 // handle error
                 Toast.makeText(getApplicationContext(),"Error on getting data ", Toast.LENGTH_LONG).show();
+                Log.e("ERROR", anError.toString());
             }
         });
     }
@@ -109,12 +97,12 @@ public class MainActivity extends AppCompatActivity {
         AndroidNetworking.initialize(getApplicationContext());
         setContentView(R.layout.activity_main);
 
-        Button submitButton = (Button) findViewById(R.id.button);
+        Button submitButton = findViewById(R.id.button);
         submitButton.setOnClickListener(localListener);
 
     }
 
-    class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+    private static class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         ImageView bmImage;
 
         public DownloadImageTask(ImageView bmImage) {
@@ -128,8 +116,7 @@ public class MainActivity extends AppCompatActivity {
                 InputStream in = new java.net.URL(urldisplay).openStream();
                 mIcon11 = BitmapFactory.decodeStream(in);
             } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
+                Log.e("Error", e.toString());
             }
             return mIcon11;
         }
